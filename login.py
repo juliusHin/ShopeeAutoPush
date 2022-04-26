@@ -8,15 +8,6 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-
-
-import time
-import getpass
-import datetime
-import os
-import sys
-import platform
 
 
 def login (username_phone_number, password, driver):
@@ -70,55 +61,4 @@ def mobile_verification(verification_number, driver):
         (By.XPATH, "//button[@class='_1ruZ5a _3Nrkgj _3kANJY _1IRuK_ X27k2C hh2rFL _3_offS']")))
     driver.find_element_by_xpath("//button[@class='_1ruZ5a _3Nrkgj _3kANJY _1IRuK_ X27k2C hh2rFL _3_offS']").click()
 
-
-def clear_screen():
-    os_type = platform.system()
-
-    if os_type == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-def main():
-
-    clear_screen()
-
-    # chrome_options = Options()
-    # chrome_options.headless = True
-
-    firefox_options = Options()
-    firefox_options.add_argument("--disable-extensions")
-
-    # driver = webdriver.Chrome(ChromeDriverManager().install(), options=)
-
-    driver = webdriver.Firefox(GeckoDriverManager().install(), options=firefox_options)
-    driver.get("https://seller.shopee.co.id/account/signin?next=%2F")
-
-    try:
-        print("Enter your email address or phone number: ")
-        username_email = input("> ")
-
-        print("Enter your password (it won't appear in the terminal): ")
-        password = getpass.getpass("> ")
-
-    #     if login succeed:
-
-        if login(username_email, password, driver):
-            # If login success, mobile verification is required.
-            print("OTP sent in your mobile number, please wait for it to be received.")
-            print("Enter verification code sent in your mobile number:")
-            mobile_verification_number = input("> ")
-
-            print("Verifying OTP...")
-            mobile_verification(mobile_verification_number, driver)
-            print("OTP correct, please wait...")
-
-
-    except Exception as exp:
-        print("An error has occured.")
-        print(str(exp))
-
-    finally:
-        print("Program Ended.")
-        driver.close()
 
