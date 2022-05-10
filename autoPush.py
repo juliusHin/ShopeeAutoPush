@@ -36,7 +36,6 @@ def clickMoreAndPush(driver):
         hover.move_to_element(more).pause(3)
         hover.click(pushIconText)
         hover.perform()
-        currentStr = "Time:{} this is {} times click remain time of text: {}\n".format(timestamp(), i
-                                                                                       , pushIconText.text)
+        currentStr = "Time:{} this is {} times click remain time of text: {}\n".format(timestamp(), i, pushIconText.text)
         print(currentStr)
     return datas

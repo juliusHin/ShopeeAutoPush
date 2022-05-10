@@ -12,13 +12,16 @@ from selenium.webdriver.common.by import By
 
 def login (username_phone_number, password, driver):
 #     return true or false
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "loginKey")))
+    print(username_phone_number)
+    print(password)
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "signin-form")))
 
 
     # If loginKey is present, the element with attribute name password also exist,
     # we set the value of this element to be the username_email and password respectively.
-    driver.find_element_by_name("loginKey").send_keys(username_phone_number)
-    driver.find_element_by_name("password").send_keys(password)
+    driver.find_element_by_css_selector("div.shopee-form-item:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > input:nth-child(1)").send_keys(username_phone_number)
+    driver.find_element_by_css_selector\
+        ("div.shopee-form-item:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > input:nth-child(1)").send_keys(password)
 
 
     # Wait until login element with a specific class value is clickable.
@@ -26,20 +29,30 @@ def login (username_phone_number, password, driver):
     # "//element_name[@atteibute_name=value]"
     # Example: <button class="_35rr5y _32qX4k _1ShBrl _3z3XZ9 _2iOIqx _2h_2_Y"
     WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@class='_1ruZ5a _3Nrkgj _3kANJY _1IRuK_ hh2rFL _3_offS']")))
+        EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[2]/div/div/div/div[3]/div/div/div/form/div[4]/div/div/button")))
 
     # If the button exists, we click it. This emulates login button with the values we provided.
-    driver.find_element_by_xpath("//button[@class='_1ruZ5a _3Nrkgj _3kANJY _1IRuK_ hh2rFL _3_offS']").click()
+    driver.find_element_by_xpath("/html/body/div[1]/div[2]/div/div/div/div[3]/div/div/div/form/div[4]/div/div/button").click()
+
+    #click button for verification link
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//button[@class="xovLmg"]')))
+    driver.find_element_by_xpath('//button[@class="xovLmg"]').click()
+
+    #wait for alert
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[@class='wyhvVD _1EApiB oAryD+ cepDQ1 _7w24N1']")))
+    driver.find_element_by_xpath("//button[@class='wyhvVD _1EApiB oAryD+ cepDQ1 _7w24N1']").click()
 
     # The page will load. The element with attribute name "autocomplete" and value "one-time-code" should appear.
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//input[@autocomplete="one-time-code"]')))
+    WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, "//div[@class='J1i6cp']")))
 
     # We get the html source of the current page and
     # we chekc if the text "Your verification code is sent by SMS to your phone" appears.
 
     html_source = driver.page_source
 
-    if "Your verification code is sent by SMS to your phone" in html_source:
+    # Shopee Seller Centre
+
+    if WebDriverWait(driver, 50).until(EC.url_changes('https://shopee.co.id/verify/link')):
         return True
 
     return False
