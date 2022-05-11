@@ -48,11 +48,15 @@ def main():
 
     #     if login succeed:
         all_product_url = "https://seller.shopee.co.id/portal/product/list/all"
+
         if login(username_email, password, driver):
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "list-panel")))
+            driver.get(all_product_url)
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "list-panel")))
 
             next_page = driver.find_element(by=By.XPATH, value="//button[@class='shopee-button shopee-button--small shopee-button--frameless shopee-button--block shopee-pager__button-next']")
             prev_page = driver.find_element(by=By.XPATH, value="//button[@class='shopee-button shopee-button--small shopee-button--frameless shopee-button--block shopee-pager__button-prev']")
+
+
             # If login success, mobile verification is required.
             # print("OTP sent in your mobile number, please wait for it to be received.")
             # print("Enter verification code sent in your mobile number:")

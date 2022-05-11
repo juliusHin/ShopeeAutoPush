@@ -31,19 +31,30 @@ def login (username_phone_number, password, driver):
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[2]/div/div/div/div[3]/div/div/div/form/div[4]/div/div/button")))
 
+
+
     # If the button exists, we click it. This emulates login button with the values we provided.
     driver.find_element_by_xpath("/html/body/div[1]/div[2]/div/div/div/div[3]/div/div/div/form/div[4]/div/div/button").click()
 
+
+
     #click button for verification link
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//button[@class="xovLmg"]')))
-    driver.find_element_by_xpath('//button[@class="xovLmg"]').click()
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='xovLmg']")))
+    driver.find_element_by_xpath("//div[@class='xovLmg']").click()
+
+
+
 
     #wait for alert
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[@class='wyhvVD _1EApiB oAryD+ cepDQ1 _7w24N1']")))
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//button[@class='wyhvVD _1EApiB oAryD+ cepDQ1 _7w24N1']")))
     driver.find_element_by_xpath("//button[@class='wyhvVD _1EApiB oAryD+ cepDQ1 _7w24N1']").click()
+
+
 
     # The page will load. The element with attribute name "autocomplete" and value "one-time-code" should appear.
     WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, "//div[@class='J1i6cp']")))
+
+
 
     # We get the html source of the current page and
     # we chekc if the text "Your verification code is sent by SMS to your phone" appears.
@@ -52,7 +63,9 @@ def login (username_phone_number, password, driver):
 
     # Shopee Seller Centre
 
-    if WebDriverWait(driver, 50).until(EC.url_changes('https://shopee.co.id/verify/link')):
+    redirect_url = WebDriverWait(driver, 120).until(EC.url_changes('https://shopee.co.id/verify/link'))
+
+    if redirect_url != driver.current_url:
         return True
 
     return False
